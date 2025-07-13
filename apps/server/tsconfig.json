@@ -13,11 +13,7 @@
     "outDir": "./dist",
     "rootDir": "./",
     "types": ["node"],
-    "composite": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
   },
-  "tsc-alias": {
-    "resolveFullPaths": true
-  }
+  "include": ["./api/**/*.ts"],
+  "exclude": ["node_modules"]
 }
