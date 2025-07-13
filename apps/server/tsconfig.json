@@ -12,8 +12,7 @@
     },
     "outDir": "./dist",
     "rootDir": "./",
-    "types": ["node"],
+    "types": ["node"]
   },
-  "include": ["./api/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["./api/**/*.ts"]
 }

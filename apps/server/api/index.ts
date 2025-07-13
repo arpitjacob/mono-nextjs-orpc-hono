@@ -8,7 +8,7 @@ import { auth } from "./lib/auth.js";
 import { createContext } from "./lib/context.js";
 import { appRouter } from "./routers/index.js";
 
-const app = new Hono();
+const app = new Hono().basePath("/api");
 
 app.use(logger());
 app.use(
@@ -21,14 +21,14 @@ app.use(
   }),
 );
 
-app.on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
+app.on(["POST", "GET"], "/auth/**", (c) => auth.handler(c.req.raw));
 
 const orpcHandler = new RPCHandler(appRouter);
 
 app.use("/rpc/*", async (c, next) => {
   const context = await createContext({ context: c });
   const { matched, response } = await orpcHandler.handle(c.req.raw, {
-    prefix: "/rpc",
+    prefix: "/api/rpc",
     context: context,
   });
 
@@ -42,17 +42,21 @@ app.get("/", (c) => {
   return c.text("OK");
 });
 
-// import { serve } from "@hono/node-server";
 
-// serve(
-//   {
-//     fetch: app.fetch,
-//     port: 3000,
-//   },
-//   (info) => {
-//     console.log(`Server is running on http://localhost:${info.port}`);
-//   },
-// );
+
+import { serve } from "@hono/node-server";
+
+if (process.env.NODE_ENV === "development") {
+  serve(
+    {
+      fetch: app.fetch,
+      port: 3000,
+    },
+    (info) => {
+      console.log(`Server is running on http://localhost:${info.port}`);
+    },
+  );
+}
 
 const handler = handle(app);
 
