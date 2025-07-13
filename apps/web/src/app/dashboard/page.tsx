@@ -13,7 +13,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!session && !isPending) {
-      router.push("/login");
+      // router.push("/login");
+      console.table(session);
+      console.table(privateData.data);
+      console.log("isPending", isPending);
     }
   }, [session, isPending, router.push]);
 
